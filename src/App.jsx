@@ -11,20 +11,20 @@ export default function App() {
   const [milkType, setMilkType] = React.useState("");
   const [drinkTemperature, setDrinkTemperature] = React.useState("");
   const [comments, setComments] = React.useState("");
-  const [chipotle, setChipotle] = React.useState(""); // NUEVO: Blister de chipotle
+  const [chipotle, setChipotle] = React.useState("");
 
   const phone = "529982271559";
 
   const milkOptions = [
-  { name: "Entera", extra: 0 },
-  { name: "Light", extra: 0 },
-  { name: "Deslactosada", extra: 12 },
-  { name: "Avena", extra: 15 },
-  { name: "Soya", extra: 14 },
-  { name: "Almendra", extra: 14 },
-  { name: "Coco", extra: 14 },
-  { name: "Breve", extra: 14 },
-];
+    { name: "Entera", extra: 0 },
+    { name: "Light", extra: 0 },
+    { name: "Deslactosada", extra: 12 },
+    { name: "Avena", extra: 15 },
+    { name: "Soya", extra: 14 },
+    { name: "Almendra", extra: 14 },
+    { name: "Coco", extra: 14 },
+    { name: "Breve", extra: 14 },
+  ];
 
   const comboData = {
     salado: {
@@ -115,7 +115,6 @@ export default function App() {
       return;
     }
 
-    // Validar chipotle si es combo salado
     if (comboType === "salado" && !chipotle) {
       alert("Selecciona con o sin blister de chipotle");
       return;
@@ -142,7 +141,6 @@ export default function App() {
       drinkText = "Americano Frío";
     }
 
-    // NUEVA ESTRUCTURA DEL MENSAJE
     let foodText = food;
     if (comboType === "salado") {
       foodText = `${food} (${chipotle})`;
@@ -188,6 +186,9 @@ export default function App() {
     boxShadow: "0 6px 20px rgba(0, 98, 65, 0.12)",
     border: `1px solid ${colors.greenLight}`,
   };
+
+  // ⚠️ CAMBIA ESTO por el nombre de tu imagen
+  const cuponImage = "/cupon-20.png"; // <-- PON EL NOMBRE EXACTO DE TU IMAGEN
 
   return (
     <div
@@ -246,7 +247,29 @@ export default function App() {
                 marginTop: "25px",
               }}
             >
-              {/* SOLO BOTÓN COMBO LOCATARIO */}
+              {/* BOTÓN DESCUENTO 20% */}
+              <button
+                onClick={() => setScreen("descuento")}
+                style={{
+                  padding: "20px",
+                  borderRadius: "15px",
+                  border: `2px solid ${colors.gold}`,
+                  background: `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)`,
+                  color: colors.white,
+                  fontWeight: "700",
+                  fontSize: "18px",
+                  cursor: "pointer",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => e.target.style.transform = "scale(1.02)"}
+                onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+              >
+                ✦ Descuento 20%
+              </button>
+
+              {/* BOTÓN COMBO LOCATARIO */}
               <button
                 onClick={() => setScreen("combo")}
                 style={{
@@ -297,6 +320,132 @@ export default function App() {
                 <li>Únicamente pago con tarjeta</li>
               </ul>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* PANTALLA DESCUENTO 20% */}
+      {screen === "descuento" && (
+        <div style={{ maxWidth: "700px", margin: "30px auto", padding: "20px" }}>
+          <div style={cardStyle}>
+            <h2 style={{ 
+              color: colors.green, 
+              fontWeight: "800",
+              letterSpacing: "2px",
+              textTransform: "uppercase",
+              fontSize: "24px",
+              textAlign: "center",
+              marginBottom: "20px"
+            }}>
+              ✦ 20% de Descuento ✦
+            </h2>
+
+            {/* IMAGEN DEL CUPÓN */}
+            <div style={{
+              textAlign: "center",
+              marginBottom: "25px",
+              padding: "20px",
+              background: colors.cream,
+              borderRadius: "15px",
+            }}>
+              <img 
+                src={cuponImage} 
+                alt="Cupón 20% descuento"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "300px",
+                  objectFit: "contain",
+                  borderRadius: "10px",
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = `
+                    <div style="padding: 40px; background: #f0f0f0; border-radius: 10px; border: 2px dashed #999;">
+                      <p style="color: #666;">🖼️ Imagen no encontrada</p>
+                      <p style="color: #999; font-size: 14px;">Sube tu imagen a la carpeta "public" en GitHub</p>
+                    </div>
+                  `;
+                }}
+              />
+            </div>
+
+            {/* INSTRUCCIONES */}
+            <div style={{
+              background: colors.greenLight,
+              padding: "25px",
+              borderRadius: "15px",
+              border: `2px solid ${colors.green}`,
+              marginBottom: "20px",
+            }}>
+              <p style={{
+                color: colors.black,
+                fontSize: "16px",
+                fontWeight: "500",
+                lineHeight: "1.8",
+                textAlign: "center",
+                marginBottom: "20px",
+              }}>
+                En la compra de alimentos o bebidas, presenta el siguiente cupón junto a tu TIA y obtén el <strong style={{ color: colors.green }}>20% de descuento</strong>:
+              </p>
+
+              {/* CÓDIGO DEL CUPÓN */}
+              <div style={{
+                background: colors.white,
+                border: `3px dashed ${colors.gold}`,
+                borderRadius: "12px",
+                padding: "20px",
+                textAlign: "center",
+                marginTop: "15px",
+              }}>
+                <p style={{
+                  fontSize: "14px",
+                  color: colors.gray,
+                  marginBottom: "8px",
+                  fontWeight: "600",
+                  letterSpacing: "1px",
+                }}>
+                  CÓDIGO DE CUPÓN
+                </p>
+                <p style={{
+                  fontSize: "32px",
+                  fontWeight: "800",
+                  color: colors.green,
+                  letterSpacing: "4px",
+                  margin: "0",
+                  fontFamily: "monospace",
+                }}>
+                  2ZQCNPP7
+                </p>
+              </div>
+            </div>
+
+            {/* BOTÓN VOLVER */}
+            <button
+              onClick={() => setScreen("home")}
+              style={{
+                width: "100%",
+                padding: "15px",
+                borderRadius: "12px",
+                border: `2px solid ${colors.green}`,
+                background: colors.white,
+                color: colors.green,
+                fontWeight: "700",
+                fontSize: "16px",
+                cursor: "pointer",
+                letterSpacing: "1px",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = colors.green;
+                e.target.style.color = colors.white;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = colors.white;
+                e.target.style.color = colors.green;
+              }}
+            >
+              ← Volver al inicio
+            </button>
           </div>
         </div>
       )}
@@ -512,7 +661,7 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* BLISTER DE CHIPOTLE - SOLO COMBO SALADO */}
+                {/* BLISTER DE CHIPOTLE */}
                 {comboType === "salado" && food && (
                   <div style={{ marginTop: "25px" }}>
                     <h3 style={{ 
