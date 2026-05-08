@@ -188,7 +188,7 @@ export default function App() {
   };
 
   // ⚠️ CAMBIA ESTO por el nombre de tu imagen
-  const cuponImage = "/cupon-20.png"; // <-- PON EL NOMBRE EXACTO DE TU IMAGEN
+  const cuponImage = "/cupon-20.jpg"; // <-- PON EL NOMBRE EXACTO DE TU IMAGEN
 
   return (
     <div
