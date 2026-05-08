@@ -18,11 +18,11 @@ export default function App() {
   const milkOptions = [
   { name: "Entera", extra: 0 },
   { name: "Light", extra: 0 },
-  { name: "Deslactosada", extra: 13 },
+  { name: "Deslactosada", extra: 12 },
   { name: "Avena", extra: 15 },
   { name: "Soya", extra: 14 },
-  { name: "Almendra", extra: 12 },
-  { name: "Coco", extra: 12 },
+  { name: "Almendra", extra: 14 },
+  { name: "Coco", extra: 14 },
   { name: "Breve", extra: 14 },
 ];
 
