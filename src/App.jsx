@@ -16,14 +16,15 @@ export default function App() {
   const phone = "529982271559";
 
   const milkOptions = [
-    { name: "Entera", extra: 0 },
-    { name: "Light", extra: 0 },
-    { name: "Avena", extra: 15 },
-    { name: "Soya", extra: 0 },
-    { name: "Almendra", extra: 0 },
-    { name: "Coco", extra: 0 },
-    { name: "Breve", extra: 14 },
-  ];
+  { name: "Entera", extra: 0 },
+  { name: "Light", extra: 0 },
+  { name: "Deslactosada", extra: 13 },
+  { name: "Avena", extra: 15 },
+  { name: "Soya", extra: 14 },
+  { name: "Almendra", extra: 12 },
+  { name: "Coco", extra: 12 },
+  { name: "Breve", extra: 14 },
+];
 
   const comboData = {
     salado: {
