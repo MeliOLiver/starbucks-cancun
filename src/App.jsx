@@ -388,36 +388,41 @@ export default function App() {
                 En la compra de alimentos o bebidas, presenta el siguiente cupón junto a tu TIA y obtén el <strong style={{ color: colors.green }}>20% de descuento</strong>:
               </p>
 
-              {/* CÓDIGO DEL CUPÓN */}
-              <div style={{
-                background: colors.white,
-                border: `3px dashed ${colors.gold}`,
-                borderRadius: "12px",
-                padding: "20px",
-                textAlign: "center",
-                marginTop: "15px",
-              }}>
-                <p style={{
-                  fontSize: "14px",
-                  color: colors.gray,
-                  marginBottom: "8px",
-                  fontWeight: "600",
-                  letterSpacing: "1px",
-                }}>
-                  CÓDIGO DE CUPÓN
-                </p>
-                <p style={{
-                  fontSize: "32px",
-                  fontWeight: "800",
-                  color: colors.green,
-                  letterSpacing: "4px",
-                  margin: "0",
-                  fontFamily: "monospace",
-                }}>
-                  2ZQ61NPCC7
-                </p>
-              </div>
-            </div>
+             {/* CÓDIGO DEL CUPÓN */}
+<div style={{
+  background: colors.white,
+  border: `3px dashed ${colors.gold}`,
+  borderRadius: "12px",
+  padding: "20px 15px",
+  textAlign: "center",
+  marginTop: "15px",
+  width: "100%",
+  boxSizing: "border-box",
+  overflowWrap: "break-word",
+}}>
+  <p style={{
+    fontSize: "13px",
+    color: colors.gray,
+    marginBottom: "10px",
+    fontWeight: "600",
+    letterSpacing: "1px",
+    textTransform: "uppercase",
+  }}>
+    Código de cupón
+  </p>
+  <p style={{
+    fontSize: "22px",
+    fontWeight: "800",
+    color: colors.green,
+    letterSpacing: "2px",
+    margin: "0",
+    fontFamily: "monospace",
+    wordBreak: "break-all",
+    overflowWrap: "break-word",
+  }}>
+    2ZQ61NPCC7
+  </p>
+</div>
 
             {/* BOTÓN VOLVER */}
             <button
