@@ -11,17 +11,17 @@ export default function App() {
   const [milkType, setMilkType] = React.useState("");
   const [drinkTemperature, setDrinkTemperature] = React.useState("");
   const [comments, setComments] = React.useState("");
+  const [chipotle, setChipotle] = React.useState(""); // NUEVO: Blister de chipotle
 
   const phone = "529982271559";
 
   const milkOptions = [
     { name: "Entera", extra: 0 },
     { name: "Light", extra: 0 },
-    { name: "Deslactosada", extra: 12 },
     { name: "Avena", extra: 15 },
-    { name: "Soya", extra: 14 },
-    { name: "Almendra", extra: 14 },
-    { name: "Coco", extra: 14 },
+    { name: "Soya", extra: 0 },
+    { name: "Almendra", extra: 0 },
+    { name: "Coco", extra: 0 },
     { name: "Breve", extra: 14 },
   ];
 
@@ -114,6 +114,12 @@ export default function App() {
       return;
     }
 
+    // Validar chipotle si es combo salado
+    if (comboType === "salado" && !chipotle) {
+      alert("Selecciona con o sin blister de chipotle");
+      return;
+    }
+
     let drinkText = drink;
 
     if (drink === "Latte" || drink === "Chai") {
@@ -135,22 +141,25 @@ export default function App() {
       drinkText = "Americano Frío";
     }
 
-    const message = `Hola, quiero pedir:
+    // NUEVA ESTRUCTURA DEL MENSAJE
+    let foodText = food;
+    if (comboType === "salado") {
+      foodText = `${food} (${chipotle})`;
+    }
 
-👤 Nombre: ${pickupName}
+    const message = `Hola, soy ${pickupName} quiero pedir:
 
 📦 ${currentCombo.title}
 
 ☕ Tamaño: ${size.name}
 
-💲 Total: $${total}
-
-🥐 Alimento: ${food}
+🥐 Alimento: ${foodText}
 
 🥤 Bebida: ${drinkText}
 
 📝 Comentarios: ${comments || "Ninguno"}
-`;
+
+💲 Total: $${total}`;
 
     window.open(
       `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
@@ -158,7 +167,6 @@ export default function App() {
     );
   };
 
-  // PALETA DE COLORES STARBUCKS
   const colors = {
     green: "#006241",
     greenDark: "#004d33",
@@ -185,8 +193,7 @@ export default function App() {
       style={{
         minHeight: "100vh",
         background: `linear-gradient(180deg, ${colors.cream} 0%, ${colors.white} 100%)`,
-        fontFamily:
-          '"SoDo Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: '"SoDo Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
       }}
     >
       <style>{`
@@ -208,32 +215,26 @@ export default function App() {
           boxShadow: "0 4px 20px rgba(0, 98, 65, 0.3)",
         }}
       >
-        <h1
-          style={{
-            margin: 0,
-            fontWeight: "800",
-            letterSpacing: "2px",
-            textTransform: "uppercase",
-            fontSize: "clamp(20px, 4vw, 28px)",
-          }}
-        >
+        <h1 style={{ 
+          margin: 0, 
+          fontWeight: "800", 
+          letterSpacing: "2px",
+          textTransform: "uppercase",
+          fontSize: "clamp(20px, 4vw, 28px)"
+        }}>
           ✦ Starbucks Aeropuerto Cancún T3 ✦
         </h1>
       </div>
 
       {/* HOME */}
       {screen === "home" && (
-        <div
-          style={{ maxWidth: "700px", margin: "30px auto", padding: "20px" }}
-        >
+        <div style={{ maxWidth: "700px", margin: "30px auto", padding: "20px" }}>
           <div style={cardStyle}>
-            <h2
-              style={{
-                color: colors.black,
-                fontWeight: "700",
-                letterSpacing: "1px",
-              }}
-            >
+            <h2 style={{ 
+              color: colors.black, 
+              fontWeight: "700",
+              letterSpacing: "1px" 
+            }}>
               Selecciona una opción
             </h2>
             <div
@@ -244,26 +245,7 @@ export default function App() {
                 marginTop: "25px",
               }}
             >
-              <button
-                style={{
-                  padding: "20px",
-                  borderRadius: "15px",
-                  border: `2px solid ${colors.gold}`,
-                  background: `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)`,
-                  color: colors.white,
-                  fontWeight: "700",
-                  fontSize: "18px",
-                  cursor: "pointer",
-                  letterSpacing: "1px",
-                  textTransform: "uppercase",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => (e.target.style.transform = "scale(1.02)")}
-                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-              >
-                ✦ Descuento 20%
-              </button>
-
+              {/* SOLO BOTÓN COMBO LOCATARIO */}
               <button
                 onClick={() => setScreen("combo")}
                 style={{
@@ -279,8 +261,8 @@ export default function App() {
                   textTransform: "uppercase",
                   transition: "all 0.3s ease",
                 }}
-                onMouseEnter={(e) => (e.target.style.transform = "scale(1.02)")}
-                onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                onMouseEnter={(e) => e.target.style.transform = "scale(1.02)"}
+                onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
               >
                 Combo Locatario
               </button>
@@ -295,24 +277,20 @@ export default function App() {
                 border: `1px solid ${colors.green}`,
               }}
             >
-              <h3
-                style={{
-                  color: colors.green,
-                  fontWeight: "700",
-                  letterSpacing: "1px",
-                  textTransform: "uppercase",
-                  fontSize: "16px",
-                }}
-              >
+              <h3 style={{ 
+                color: colors.green, 
+                fontWeight: "700",
+                letterSpacing: "1px",
+                textTransform: "uppercase",
+                fontSize: "16px"
+              }}>
                 Términos y condiciones
               </h3>
-              <ul
-                style={{
-                  lineHeight: "2",
-                  color: colors.black,
-                  fontWeight: "500",
-                }}
-              >
+              <ul style={{ 
+                lineHeight: "2", 
+                color: colors.black,
+                fontWeight: "500"
+              }}>
                 <li>Traer puesta tu TIA</li>
                 <li>Mandar el pedido 10 min antes de venir por él</li>
                 <li>Únicamente pago con tarjeta</li>
@@ -324,18 +302,14 @@ export default function App() {
 
       {/* COMBO */}
       {screen === "combo" && (
-        <div
-          style={{ maxWidth: "1100px", margin: "30px auto", padding: "20px" }}
-        >
+        <div style={{ maxWidth: "1100px", margin: "30px auto", padding: "20px" }}>
           <div style={cardStyle}>
-            <h2
-              style={{
-                color: colors.black,
-                fontWeight: "700",
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-              }}
-            >
+            <h2 style={{ 
+              color: colors.black, 
+              fontWeight: "700",
+              letterSpacing: "1px",
+              textTransform: "uppercase" 
+            }}>
               ✦ Combo Locatario ✦
             </h2>
 
@@ -369,13 +343,13 @@ export default function App() {
                 onClick={() => {
                   setComboType("salado");
                   setFood("");
+                  setChipotle("");
                 }}
                 style={{
                   padding: "15px 25px",
                   borderRadius: "12px",
                   border: "none",
-                  background:
-                    comboType === "salado" ? colors.green : colors.greenLight,
+                  background: comboType === "salado" ? colors.green : colors.greenLight,
                   color: comboType === "salado" ? colors.white : colors.green,
                   fontWeight: "700",
                   cursor: "pointer",
@@ -391,13 +365,13 @@ export default function App() {
                 onClick={() => {
                   setComboType("dulce");
                   setFood("");
+                  setChipotle("");
                 }}
                 style={{
                   padding: "15px 25px",
                   borderRadius: "12px",
                   border: "none",
-                  background:
-                    comboType === "dulce" ? colors.green : colors.greenLight,
+                  background: comboType === "dulce" ? colors.green : colors.greenLight,
                   color: comboType === "dulce" ? colors.white : colors.green,
                   fontWeight: "700",
                   cursor: "pointer",
@@ -415,15 +389,13 @@ export default function App() {
             <>
               {/* TAMAÑOS */}
               <div style={{ ...cardStyle, marginTop: "25px" }}>
-                <h2
-                  style={{
-                    color: colors.black,
-                    fontWeight: "700",
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: "20px",
-                  }}
-                >
+                <h2 style={{ 
+                  color: colors.black, 
+                  fontWeight: "700",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase",
+                  fontSize: "20px"
+                }}>
                   Selecciona tamaño
                 </h2>
                 <div
@@ -439,34 +411,27 @@ export default function App() {
                       key={item.name}
                       onClick={() => setSize(item)}
                       style={{
-                        background:
-                          size?.name === item.name
-                            ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)`
-                            : colors.white,
-                        color:
-                          size?.name === item.name
-                            ? colors.white
-                            : colors.black,
+                        background: size?.name === item.name 
+                          ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)` 
+                          : colors.white,
+                        color: size?.name === item.name ? colors.white : colors.black,
                         borderRadius: "18px",
                         padding: "25px 20px",
                         cursor: "pointer",
-                        border:
-                          size?.name === item.name
-                            ? "none"
-                            : `2px solid ${colors.green}`,
+                        border: size?.name === item.name 
+                          ? "none" 
+                          : `2px solid ${colors.green}`,
                         textAlign: "center",
                         fontWeight: "700",
                         transition: "all 0.3s ease",
                       }}
                     >
-                      <h3
-                        style={{
-                          fontSize: "22px",
-                          letterSpacing: "2px",
-                          textTransform: "uppercase",
-                          marginBottom: "8px",
-                        }}
-                      >
+                      <h3 style={{ 
+                        fontSize: "22px", 
+                        letterSpacing: "2px",
+                        textTransform: "uppercase",
+                        marginBottom: "8px"
+                      }}>
                         {item.name}
                       </h3>
                       <p style={{ fontSize: "18px" }}>${item.price}</p>
@@ -477,15 +442,13 @@ export default function App() {
 
               {/* ALIMENTOS */}
               <div style={{ ...cardStyle, marginTop: "25px" }}>
-                <h2
-                  style={{
-                    color: colors.black,
-                    fontWeight: "700",
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: "20px",
-                  }}
-                >
+                <h2 style={{ 
+                  color: colors.black, 
+                  fontWeight: "700",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase",
+                  fontSize: "20px"
+                }}>
                   Selecciona alimento
                 </h2>
                 <div
@@ -501,8 +464,7 @@ export default function App() {
                       key={item.name}
                       onClick={() => setFood(item.name)}
                       style={{
-                        background:
-                          food === item.name ? colors.greenLight : colors.white,
+                        background: food === item.name ? colors.greenLight : colors.white,
                         border:
                           food === item.name
                             ? `3px solid ${colors.green}`
@@ -513,17 +475,15 @@ export default function App() {
                         transition: "all 0.3s ease",
                       }}
                     >
-                      <div
-                        style={{
-                          width: "100%",
-                          height: "200px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          background: colors.white,
-                          padding: "20px",
-                        }}
-                      >
+                      <div style={{
+                        width: "100%",
+                        height: "200px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: colors.white,
+                        padding: "20px",
+                      }}>
                         <img
                           src={item.image}
                           alt={item.name}
@@ -534,42 +494,86 @@ export default function App() {
                           }}
                         />
                       </div>
-                      <div
-                        style={{
-                          padding: "18px",
-                          background:
-                            food === item.name
-                              ? colors.greenLight
-                              : colors.white,
-                          textAlign: "center",
-                        }}
-                      >
-                        <h3
-                          style={{
-                            color: colors.black,
-                            fontWeight: "600",
-                            fontSize: "16px",
-                          }}
-                        >
+                      <div style={{ 
+                        padding: "18px", 
+                        background: food === item.name ? colors.greenLight : colors.white,
+                        textAlign: "center"
+                      }}>
+                        <h3 style={{ 
+                          color: colors.black, 
+                          fontWeight: "600",
+                          fontSize: "16px"
+                        }}>
                           {item.name}
                         </h3>
                       </div>
                     </div>
                   ))}
                 </div>
+
+                {/* BLISTER DE CHIPOTLE - SOLO COMBO SALADO */}
+                {comboType === "salado" && food && (
+                  <div style={{ marginTop: "25px" }}>
+                    <h3 style={{ 
+                      color: colors.black, 
+                      fontWeight: "700",
+                      letterSpacing: "1px"
+                    }}>
+                      🌶️ Blister de Chipotle
+                    </h3>
+                    <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
+                      <button
+                        onClick={() => setChipotle("Con blister de chipotle")}
+                        style={{
+                          padding: "14px 24px",
+                          borderRadius: "12px",
+                          border: "none",
+                          background:
+                            chipotle === "Con blister de chipotle" 
+                              ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)` 
+                              : colors.greenLight,
+                          color: chipotle === "Con blister de chipotle" ? colors.white : colors.green,
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          letterSpacing: "1px",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        🌶️ Con Chipotle
+                      </button>
+                      <button
+                        onClick={() => setChipotle("Sin blister de chipotle")}
+                        style={{
+                          padding: "14px 24px",
+                          borderRadius: "12px",
+                          border: "none",
+                          background:
+                            chipotle === "Sin blister de chipotle" 
+                              ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)` 
+                              : colors.greenLight,
+                          color: chipotle === "Sin blister de chipotle" ? colors.white : colors.green,
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          letterSpacing: "1px",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        ❌ Sin Chipotle
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* BEBIDAS */}
               <div style={{ ...cardStyle, marginTop: "25px" }}>
-                <h2
-                  style={{
-                    color: colors.black,
-                    fontWeight: "700",
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: "20px",
-                  }}
-                >
+                <h2 style={{ 
+                  color: colors.black, 
+                  fontWeight: "700",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase",
+                  fontSize: "20px"
+                }}>
                   Selecciona bebida
                 </h2>
                 <div
@@ -589,10 +593,7 @@ export default function App() {
                         setDrinkTemperature("");
                       }}
                       style={{
-                        background:
-                          drink === item.name
-                            ? colors.greenLight
-                            : colors.white,
+                        background: drink === item.name ? colors.greenLight : colors.white,
                         border:
                           drink === item.name
                             ? `3px solid ${colors.green}`
@@ -603,17 +604,15 @@ export default function App() {
                         transition: "all 0.3s ease",
                       }}
                     >
-                      <div
-                        style={{
-                          width: "100%",
-                          height: "200px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          background: colors.white,
-                          padding: "20px",
-                        }}
-                      >
+                      <div style={{
+                        width: "100%",
+                        height: "200px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: colors.white,
+                        padding: "20px",
+                      }}>
                         <img
                           src={item.image}
                           alt={item.name}
@@ -624,23 +623,16 @@ export default function App() {
                           }}
                         />
                       </div>
-                      <div
-                        style={{
-                          padding: "18px",
-                          background:
-                            drink === item.name
-                              ? colors.greenLight
-                              : colors.white,
-                          textAlign: "center",
-                        }}
-                      >
-                        <h3
-                          style={{
-                            color: colors.black,
-                            fontWeight: "600",
-                            fontSize: "16px",
-                          }}
-                        >
+                      <div style={{ 
+                        padding: "18px", 
+                        background: drink === item.name ? colors.greenLight : colors.white,
+                        textAlign: "center"
+                      }}>
+                        <h3 style={{ 
+                          color: colors.black, 
+                          fontWeight: "600",
+                          fontSize: "16px"
+                        }}>
                           {item.name}
                         </h3>
                       </div>
@@ -651,22 +643,14 @@ export default function App() {
                 {(drink === "Latte" || drink === "Chai") && (
                   <>
                     <div style={{ marginTop: "25px" }}>
-                      <h3
-                        style={{
-                          color: colors.black,
-                          fontWeight: "700",
-                          letterSpacing: "1px",
-                        }}
-                      >
+                      <h3 style={{ 
+                        color: colors.black, 
+                        fontWeight: "700",
+                        letterSpacing: "1px"
+                      }}>
                         Frío o caliente
                       </h3>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "12px",
-                          marginTop: "12px",
-                        }}
-                      >
+                      <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
                         <button
                           onClick={() => setDrinkTemperature("Frío")}
                           style={{
@@ -674,13 +658,10 @@ export default function App() {
                             borderRadius: "12px",
                             border: "none",
                             background:
-                              drinkTemperature === "Frío"
-                                ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)`
+                              drinkTemperature === "Frío" 
+                                ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)` 
                                 : colors.greenLight,
-                            color:
-                              drinkTemperature === "Frío"
-                                ? colors.white
-                                : colors.green,
+                            color: drinkTemperature === "Frío" ? colors.white : colors.green,
                             fontWeight: "700",
                             cursor: "pointer",
                             letterSpacing: "1px",
@@ -696,13 +677,10 @@ export default function App() {
                             borderRadius: "12px",
                             border: "none",
                             background:
-                              drinkTemperature === "Caliente"
-                                ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)`
+                              drinkTemperature === "Caliente" 
+                                ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)` 
                                 : colors.greenLight,
-                            color:
-                              drinkTemperature === "Caliente"
-                                ? colors.white
-                                : colors.green,
+                            color: drinkTemperature === "Caliente" ? colors.white : colors.green,
                             fontWeight: "700",
                             cursor: "pointer",
                             letterSpacing: "1px",
@@ -715,13 +693,11 @@ export default function App() {
                     </div>
 
                     <div style={{ marginTop: "25px" }}>
-                      <h3
-                        style={{
-                          color: colors.black,
-                          fontWeight: "700",
-                          letterSpacing: "1px",
-                        }}
-                      >
+                      <h3 style={{ 
+                        color: colors.black, 
+                        fontWeight: "700",
+                        letterSpacing: "1px"
+                      }}>
                         Tipo de leche
                       </h3>
                       <div
@@ -741,13 +717,10 @@ export default function App() {
                               borderRadius: "12px",
                               border: "none",
                               background:
-                                milkType === milk.name
-                                  ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)`
+                                milkType === milk.name 
+                                  ? `linear-gradient(135deg, ${colors.green} 0%, ${colors.greenDark} 100%)` 
                                   : colors.greenLight,
-                              color:
-                                milkType === milk.name
-                                  ? colors.white
-                                  : colors.green,
+                              color: milkType === milk.name ? colors.white : colors.green,
                               fontWeight: "600",
                               cursor: "pointer",
                               transition: "all 0.3s ease",
@@ -766,36 +739,30 @@ export default function App() {
 
               {/* RESUMEN */}
               <div style={{ ...cardStyle, marginTop: "25px" }}>
-                <h2
-                  style={{
-                    color: colors.black,
-                    fontWeight: "700",
-                    letterSpacing: "1px",
-                    textTransform: "uppercase",
-                    fontSize: "20px",
-                  }}
-                >
+                <h2 style={{ 
+                  color: colors.black, 
+                  fontWeight: "700",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase",
+                  fontSize: "20px"
+                }}>
                   ✦ Resumen del pedido ✦
                 </h2>
 
-                <div
-                  style={{
-                    background: colors.greenLight,
-                    padding: "20px",
-                    borderRadius: "15px",
-                    marginTop: "15px",
-                    border: `2px solid ${colors.green}`,
-                  }}
-                >
-                  <p
-                    style={{
-                      color: colors.black,
-                      fontSize: "1.4rem",
-                      fontWeight: "800",
-                      textAlign: "center",
-                      letterSpacing: "1px",
-                    }}
-                  >
+                <div style={{
+                  background: colors.greenLight,
+                  padding: "20px",
+                  borderRadius: "15px",
+                  marginTop: "15px",
+                  border: `2px solid ${colors.green}`,
+                }}>
+                  <p style={{ 
+                    color: colors.black, 
+                    fontSize: "1.4rem",
+                    fontWeight: "800",
+                    textAlign: "center",
+                    letterSpacing: "1px"
+                  }}>
                     Total: ${total}
                   </p>
                 </div>
@@ -836,10 +803,8 @@ export default function App() {
                     transition: "all 0.3s ease",
                     boxShadow: "0 4px 15px rgba(37, 211, 102, 0.3)",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.transform = "scale(1.02)")
-                  }
-                  onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                  onMouseEnter={(e) => e.target.style.transform = "scale(1.02)"}
+                  onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
                 >
                   📱 Enviar pedido por WhatsApp
                 </button>
